@@ -17,4 +17,8 @@ imagesc(img1), colormap(myColorScale), colorbar;
 figure, imagesc(myHE1), colormap(myColorScale), colorbar;
 toc;
 
-
+%% Adaptive Histogram Equalization
+tic;
+myAHE1= myAHE(img1, 30);
+figure, imagesc(myAHE1), colormap(myColorScale), colorbar;
+toc;
