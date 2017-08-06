@@ -75,3 +75,4 @@ daspect([1 1 1]);
 colorbar;
 toc;
 
+save('part1', '-regexp', '^new_img');

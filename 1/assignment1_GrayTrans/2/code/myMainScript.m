@@ -111,3 +111,4 @@ figure, image(img3),  title('Image 3'),colormap(myColorScale), colorbar, daspect
 figure, imagesc(myCLAHE3), title('CLAHE on Image 3 with window 61 x 61 and threshold 0.0025'), colormap(myColorScale), colorbar, daspect([1 1 1]);
 toc;
 
+save('part2','-regexp', '^my');
