@@ -12,6 +12,14 @@ img_1 = imread('../data/circles_concentric.png');
 D = 2;
 new_img_D2 = myShrinkImageByFactorD(img_1, 2);
 new_img_D3 = myShrinkImageByFactorD(img_1, 3);
+
+figure();
+imagesc(img_1);
+colormap (myColorScale);
+title('Original Image');
+colorbar;
+
+figure();
 imagesc(new_img_D2);
 colormap (myColorScale);  
 title('D = 2');
@@ -24,12 +32,20 @@ colormap (myColorScale);
 colorbar;
 toc;
 
-%% Debug this : Enlarging image
+%% Enlarging image
 tic;
 img_2 = imread('../data/barbaraSmall.png');
 new_img_2 = myBilinearInterpolation(img_2);
+
+figure();
+imagesc(img_2);
+title('Original image');
+colormap (myColorScale);  
+colorbar;
+
 figure();
 imagesc(new_img_2);
+title('Bylinear Interpolated image');
 colormap (myColorScale);  
 colorbar;
 toc;
@@ -38,8 +54,16 @@ toc;
 tic;
 img_3 = imread('../data/barbaraSmall.png');
 new_img_3 = myNearestNeighborInterpolation(img_3);
+
+figure();
+imagesc(img_3);
+title('Original image');
+colormap (myColorScale);  
+colorbar;
+
 figure();
 imagesc(new_img_3);
+title('Nearest Neighbour Interpolated image');
 colormap (myColorScale);  
 colorbar;
 toc;

@@ -1,6 +1,5 @@
 function [ new_img ] = myHE( img )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%%Does Histogram Equalisation
 [m n p] = size(img);
 new_img = zeros(size(img));
 for i=1:p,
