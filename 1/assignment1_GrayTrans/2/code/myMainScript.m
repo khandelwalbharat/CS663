@@ -24,3 +24,9 @@ tic;
 myAHE1= myAHE(img1, 30);
 figure, imagesc(myAHE1), colormap(myColorScale), colorbar;
 toc;
+
+%% Contrast-limited Adaptive Histogram Equalization
+tic;
+myCLAHE1= myCLAHE(img1, 30, 0.005);
+figure, imagesc(myCLAHE1), colormap(myColorScale), colorbar;
+toc;
