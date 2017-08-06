@@ -10,6 +10,8 @@ img1 = imread('../data/barbara.png');
 img2 = imread('../data/TEM.png');
 img3 = imread('../data/canyon.png');
 
+imagesc(img1)
+
 %% myHE
 tic;
 myHE1 = myHE(img1);
