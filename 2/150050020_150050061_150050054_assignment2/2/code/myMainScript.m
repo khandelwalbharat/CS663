@@ -65,6 +65,7 @@ colorbar;
 fprintf('The RMSD value for the original and filtered image is %f\n', RMSD(imageOrig, imageBilateralFiltered));
 
 %% Give a map of values to optimize the value of sigma values
+%
 % fprintf('Calculating values...\n');
 % valmat = zeros(1000, 1000);
 % for s=1:3:100,
@@ -75,8 +76,10 @@ fprintf('The RMSD value for the original and filtered image is %f\n', RMSD(image
 %         valmat(s,i) = k;
 %     end
 % end
+%
 
 %% Some commented code which gives the RMSD values for the neighbouring values
+%
 % Gives a map of values
 % values figured out : 1.6, 9.7
 % neighbouring values: 
@@ -93,4 +96,5 @@ fprintf('The RMSD value for the original and filtered image is %f\n', RMSD(image
 % fprintf('%f \n', RMSD(imageOrig, im2));
 % fprintf('%f \n', RMSD(imageOrig, im3));
 % fprintf('%f \n', RMSD(imageOrig, im4));
+%
 toc;
