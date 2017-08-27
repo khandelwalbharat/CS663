@@ -63,7 +63,12 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Image Sharpening</a></li></ul></div><h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Image Sharpening</a></li></ul></div>
+
+    <h2>Inferences</h2>
+    <p>We found that after a certain point, increasing sigma and scale (like making scale too large, or scale too large) makes the image less useful. For example, increasing the scale beyond a large quantity makes the image "black-and-white" because of the huge jumps made by the DoG of the image. Keeping the scale as 2, and sigma as 5, we get satisfactory results for both the images.</p>
+
+  <h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
 </pre><h2>Image Sharpening<a name="2"></a></h2><pre class="codeinput">    img1 = load(<span class="string">'../data/superMoonCrop.mat'</span>);
     img2 = load(<span class="string">'../data/lionCrop.mat'</span>);
     img1 = img1.imageOrig;

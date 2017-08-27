@@ -1,0 +1,240 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-22"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Image Sharpening</a></li></ul></div><h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
+</pre><h2>Image Sharpening<a name="2"></a></h2><pre class="codeinput">    img1 = load(<span class="string">'../data/barbara.mat'</span>);
+    img1 = img1.imageOrig;
+    myPatchBasedFiltering(img1);
+toc;
+</pre><pre class="codeoutput">
+set_sigma =
+
+    0.8300
+
+
+set_sigma =
+
+    0.8300
+
+
+rmsd =
+
+    3.0463
+
+Elapsed time is 286.852042 seconds.
+</pre><img width="90%" src="../images/myMainScript_01.png" alt=""><br> <img vspace="5" hspace="5" src="../images/myMainScript_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div>
+<div class="content"><pre class="codeinput">  <span class="keyword">function</span> myPatchBasedFiltering( img )
+  <span class="comment">% MYPATCHBASEDFILTERING Summary of this function goes here</span>
+  <span class="comment">%   Detailed explanation goes here</span>
+
+<span class="comment">%   Report</span>
+
+<span class="comment">%   The optimal parameter found is 0.83 with RMSD 3.01</span>
+<span class="comment">%   This was found by varying sigma in a loop and finding the point with the least RMSD.</span>
+
+<span class="comment">%   RMSD values for 0.9*sigma or 0.76 = 3.063 and for 1.1*sigma or 0.91 = 3.03</span>
+
+
+<span class="comment">%   Explanation of the procedure-</span>
+
+<span class="comment">%   We found that the process was taking more time and so we took the approach as mentioned in the document.</span>
+<span class="comment">%   We first took the guassian blur of the image given and the downsampled the image. We then added a guassian noise</span>
+<span class="comment">%   to the image and then applied the patch based filtering technique.</span>
+<span class="comment">%   In this technique - for every pixel in the image lets say a, we took a window around the image of size 25 * 25 (if possible)</span>
+<span class="comment">%   and then for every possible pixel in the window lets say b, if possible we considered the patch centered at that pixel</span>
+<span class="comment">%   (pixel b), we weight pixel b by the similarity of the patches around a and b.</span>
+<span class="comment">%   To make the patches isotropic, we multiplied a guassian filter to the difference vector (difference of the two patches)</span>
+<span class="comment">%   This is so that firstly symmetry is maintained and more importantly because the farther away pixels in the patch should</span>
+<span class="comment">%   have a smaller weight in deciding the similarity as in the end we would just consider the intensity of the center of the</span>
+<span class="comment">%   patch.</span>
+
+<span class="comment">%   The parameters used are -</span>
+<span class="comment">%   for adding noise, we added a guassian random variable with std deviation about sqrt(30) or around 5.5 percent of the range</span>
+<span class="comment">%   for the guassian filter for isotropic, we added a guassian with std deviation of 2 ( as patch size is 9 so on either direction</span>
+<span class="comment">%   its 4 . By 3*sigma rule we want our sigma to be a little more.)</span>
+
+<span class="comment">%   LimitPatch1, LimitPatch2, LimitWindow is for covering the corner cases if the central pixel or the other patch's pixels are near corners.</span>
+
+      hwindow = 10;
+      sig = 0.66;
+      G = fspecial(<span class="string">'gaussian'</span>, [2*hwindow+1 2*hwindow+1], sig);
+      previmg= imfilter(img,G);
+
+      [m n] = size(previmg);
+      index_x = 1:2:m;
+      index_y = 1:2:n;
+      previmg = previmg(index_x, index_y);
+
+      origimg=previmg;
+
+      [m n] =size(previmg);
+      previmg=previmg+sqrt(0.3*(max(max(previmg))-min(min(previmg))))*randn(m,n);
+
+      guassian_filter=fspecial(<span class="string">'gaussian'</span>, [9 9], 2);
+
+      set_sigma=0.83
+      newimg=previmg;
+
+      [m n p] = size(newimg);
+
+      <span class="keyword">for</span> i=1:m
+          <span class="keyword">for</span> j=1:n
+
+<span class="comment">% LimitPatch1 is the distance that the patch at the central pixel (pixel i,j) can be in all the directions. Max value is 4 in any direction</span>
+
+                leftLimitPatch1=min(4,j-1);
+                rightLimitPatch1=min(4,n-j);
+                topLimitPatch1=min(4,i-1);
+                bottomLimitPatch1=min(4,m-i);
+
+<span class="comment">% LimitWindow is the limits of the window that can be created keeping in mind the corner cases. Max window is 25*25.</span>
+
+                leftLimitWindow=max(1,j-12);
+                rightLimitWindow=min(n,j+12);
+                topLimitWindow=max(1,i-12);
+                bottomLimitWindow=min(m,i+12);
+
+                weight=zeros(bottomLimitWindow-topLimitWindow, rightLimitWindow-leftLimitWindow+1);
+
+                <span class="keyword">for</span> k=topLimitWindow:bottomLimitWindow
+
+                  <span class="keyword">for</span> l=leftLimitWindow:rightLimitWindow
+
+<span class="comment">% LimitPatch2 is the distance that the patch at the pixel in the window (pixel k,l) can be in all the directions. Max value is 4 in any direction</span>
+
+                    leftLimitPatch2=min(min(4,l-leftLimitWindow),leftLimitPatch1);
+                    rightLimitPatch2=min(min(4,rightLimitWindow-l),rightLimitPatch1);
+                    topLimitPatch2=min(min(4,k-topLimitWindow),topLimitPatch1);
+                    bottomLimitPatch2=min(min(4,bottomLimitWindow-k),bottomLimitPatch1);
+
+
+                    patch1=previmg(i-topLimitPatch2:i+bottomLimitPatch2,j-leftLimitPatch2:j+rightLimitPatch2);
+                    patch2=previmg(k-topLimitPatch2:k+bottomLimitPatch2,l-leftLimitPatch2:l+rightLimitPatch2);
+                    difference=patch1-patch2;
+                    difference=difference.*guassian_filter(5-topLimitPatch2:5+bottomLimitPatch2,5-leftLimitPatch2:5+rightLimitPatch2);
+
+
+                    weight(k-topLimitWindow+1,l-leftLimitWindow+1)=exp(-sum(sum(difference.^2))/(set_sigma*set_sigma));
+
+                  <span class="keyword">end</span>
+
+                <span class="keyword">end</span>
+
+                newimg(i,j)=sum(sum(weight.*previmg(topLimitWindow:bottomLimitWindow,leftLimitWindow:rightLimitWindow)))/sum(sum(weight));
+          <span class="keyword">end</span>
+      <span class="keyword">end</span>
+      set_sigma
+
+      rmsd= sqrt(sum(sum((newimg-origimg).^2))/(m*n))
+
+    figure;
+    subplot(1,3,1);
+    imagesc((origimg/100));
+    daspect([1 1 1]);
+    axis <span class="string">tight</span>;
+    colormap(<span class="string">'Gray'</span>);
+    title(<span class="string">'Original'</span>);
+
+    subplot(1,3,2);
+    imagesc((previmg/100));
+    daspect([1 1 1]);
+    axis <span class="string">tight</span>;
+    colormap(<span class="string">'Gray'</span>);
+    title(<span class="string">'Corrupted'</span>);
+
+    subplot(1,3,3);
+    imagesc((newimg/100));
+    daspect([1 1 1]);
+    axis <span class="string">tight</span>;
+    colormap(<span class="string">'Gray'</span>);
+    title(<span class="string">'Filtered'</span>);
+
+
+    figure;
+    imagesc(guassian_filter);
+    daspect([1 1 1]);
+    axis <span class="string">tight</span>;
+    colormap(<span class="string">'Gray'</span>);
+    title(<span class="string">'Guassian Filter'</span>);
+    colorbar;
+
+  <span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div>
+<!--
+##### SOURCE BEGIN #####
+%% MyMainScript
+
+tic;
+%% Image Sharpening
+    img1 = load('../data/barbara.mat');
+    img1 = img1.imageOrig;
+    myPatchBasedFiltering(img1);
+toc;
+
+##### SOURCE END #####
+--></body></html>
