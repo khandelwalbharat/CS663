@@ -1,4 +1,4 @@
-function [ smooth_img, Ix, Iy, eig1, eig2, C ] = myHarrisCornerDetector( imageOrig, sigma_smooth, sigma_region, k )
+function [ smooth_img, Ix, Iy, eig1, eig2, final_C ] = myHarrisCornerDetector( imageOrig, sigma_smooth, sigma_region, k )
 % Gives Harris corner detection
 % get the values of K
 K_smooth = round(3*sigma_smooth);
@@ -36,5 +36,9 @@ eig2 = eig1 - 2*eig2;
 % det - k*(trace).^2
 C = (wIx2.*wIy2 - wIxIy.^2) - k*((wIx2 + wIy2).^2);
 
+% non maximal suppression
+index = (C == ordfilt2(C, 9, true(3)));
+final_C = zeros(size(C)); 
+final_C(index) = C(index);
 end
 
