@@ -1,5 +1,5 @@
 function [ smooth_img, Ix, Iy, eig1, eig2, final_C ] = myHarrisCornerDetector( imageOrig, sigma_smooth, sigma_region, k )
-% Gives Harris corner detection
+%% Gives Harris corner detection
 % get the values of K
 K_smooth = round(3*sigma_smooth);
 K_region = round(3*sigma_region);
@@ -14,31 +14,30 @@ minIntensity = min(imageOrig(:));
 maxIntensity = max(imageOrig(:));
 img = (imageOrig - minIntensity)/(maxIntensity - minIntensity);
 
-% smoothen the image
+%% smoothen the image
 smooth_img = imfilter(img, smooth_filt);
 
-% find x and y gradients ( assuming x is horizontal)
+%% find x and y gradients ( assuming x is horizontal)
 Ix = imfilter(smooth_img, gradVector);
 Iy = imfilter(smooth_img, gradVector');
 
-% generate the matrices for structure tensor ( w*Ix2, w*Iy2, w*ix*Iy )
+%% generate the matrices for structure tensor ( w*Ix2, w*Iy2, w*Ix*Iy )
 wIx2  = imfilter(Ix.^2, region_filt);
 wIy2  = imfilter(Iy.^2, region_filt);
 wIxIy = imfilter(Ix.*Iy, region_filt);
 
-% finding the eigenvalues in bulk ( with a bit of math )
+%% finding the eigenvalues in bulk ( with a bit of math )
 eig1 = (wIx2 + wIy2)/2;
 eig2 = sqrt((wIx2 - wIy2).^2 + 4*(wIxIy.^2))/2;
 
 eig1 = eig1 + eig2;
 eig2 = eig1 - 2*eig2;
 
-% det - k*(trace).^2
+%% det - k*(trace).^2
 C = (wIx2.*wIy2 - wIxIy.^2) - k*((wIx2 + wIy2).^2);
 
-% non maximal suppression
+%% non maximal suppression
 index = (C == ordfilt2(C, 9, true(3)));
-final_C = zeros(size(C)); 
+final_C = zeros(size(C));
 final_C(index) = C(index);
 end
-

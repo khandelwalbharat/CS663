@@ -7,42 +7,73 @@ myColorScale = [ colorScale' colorScale' colorScale' ];
 % This contains the code that imports the image,
 % generates the plots, and computes the corners
 tic;
-%% Your code here
+%% Code for implementing myHarrisCornerDetector
 load('../data/boat.mat');
 
 
 % assume only grayscale images
+% The optimal values used are k=0.005, sigma_smooth=2.0 and
+% sigma_region=16.9
 [m n] = size(imageOrig);
-[img, Ix, Iy, eig1, eig2, C] = myHarrisCornerDetector(imageOrig, 1.3, 17.6, 0.095);
+[img, Ix, Iy, eig1, eig2, C] = myHarrisCornerDetector(imageOrig, 2.58, 17.1, 0.15);
 
 
-% show the image
-% imagesc(imageOrig);
-% daspect([1 1 1]);
-% axis tight;
-% colormap(myColorScale);
-% colorbar;
+%% Show the images
+% Oiginal Image 
+figure();
+imagesc(imageOrig);
+daspect([1 1 1]);
+axis tight;
+colormap(myColorScale);
+colorbar;
+title('Original Image');
 
-% figure();
+% Smooth Image
+figure();
 imagesc(img);
 daspect([1 1 1]);
 axis tight;
 colormap(myColorScale);
 colorbar;
-% 
-% figure();
-% imagesc(Ix);
-% daspect([1 1 1]);
-% axis tight;
-% colormap(myColorScale);
-% colorbar;
-% 
-% figure();
-% imagesc(Iy);
-% daspect([1 1 1]);
-% axis tight;
-% colormap(myColorScale);
-% colorbar;
+title('Smooth Image');
+
+% Derivative Image along X axis
+figure();
+imagesc(Ix);
+daspect([1 1 1]);
+axis tight;
+colormap(myColorScale);
+colorbar;
+title('Derivative Image along X axis');
+
+% Derivative Image along Y axis
+figure();
+imagesc(Iy);
+daspect([1 1 1]);
+axis tight;
+colormap(myColorScale);
+colorbar;
+title('Derivative Image along Y axis');
+
+% eig1 image
+figure();
+imagesc(eig1);
+daspect([1 1 1]);
+axis tight;
+colormap(myColorScale);
+colorbar;
+title('Eigenvalue eig1 of the structure tensor');
+
+% eig2 image
+figure();
+imagesc(eig2);
+daspect([1 1 1]);
+axis tight;
+colormap(myColorScale);
+colorbar;
+title('Eigenvalue eig2 of the structure tensor');
+
+%% color_img is used to display red dots for corners
 color_img = zeros(m, n, 3);
 for i=1:3,
     color_img(:,:,i) = img;
@@ -63,17 +94,12 @@ tmp = color_img(:,:,3);
 tmp(C) = 0;
 color_img(:,:,3) = tmp;
 
-
+% Corners highlighted
 figure();
 imagesc(color_img);
 daspect([1 1 1]);
 axis tight;
 colormap(myColorScale);
 colorbar;
-
-% figure();
-% imagesc(eig2);
-% daspect([1 1 1]);
-% axis tight;
-% colormap(myColorScale);
-% colorbar;
+title('Corners highlighted');
+toc;
