@@ -9,22 +9,20 @@ myColorScale = [ colorScale' colorScale' colorScale' ];
 tic;
 %% Your code here
 image = double(imread('../data/baboonColor.png'));
-[img, features, segmented_img] = myMeanShiftSegmentation(image, 2, 1, 870, 270, 150, 20, 0.08);
-
-figure();
-imagesc(image);
+[img, features, segmented_img] = myMeanShiftSegmentation(image, 2, 1, 1500, 250, 250, 15, 0.1);
+figure;
+subplot(1,2,1);
+imagesc(image/255);
 daspect([1 1 1]);
 axis tight;
 colormap(myColorScale);
-colorbar;
-title('Original Image');
+title('Original');
 
-figure();
+subplot(1,2,2);
 imagesc(segmented_img);
 daspect([1 1 1]);
 axis tight;
 colormap(myColorScale);
-colorbar;
-title('Segmented Image');
+title('Segmented');
 
 toc;

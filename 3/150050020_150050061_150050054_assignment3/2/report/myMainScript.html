@@ -1,0 +1,239 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-09-03"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+/*div.imgContainer {
+float: left;
+    }*/
+
+
+.main_block: before, .main_block: after {
+    overflow: hidden;
+    content: "";
+    display: table;
+}
+
+.main_block: after {
+    clear: both;
+}
+
+.inner_block {
+    display: inline-block;
+    float: left;
+    width:50%;
+}
+
+.inner_block img {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Your code here</a></li><li><a href="#3">function myMeanShiftSegmentation</a></li>
+  <li><a href="#4">Image Comparison</a></li>
+  <li><a href="#4">3d Scatter Plot comparison</a></li>
+  </ul></div><h2>MyMainScript<a name="1"></a></h2><p>sample for my own colormap</p><pre class="codeinput">myNumOfColors = 256;
+colorScale = 0:1/(myNumOfColors-1):1;
+myColorScale = [ colorScale' colorScale' colorScale' ];
+
+<span class="comment">% This contains the code that imports the image,</span>
+<span class="comment">% generates the plots, and segments it</span>
+tic;
+</pre><h2>Your code here<a name="2"></a></h2><pre class="codeinput">image = double(imread(<span class="string">'../data/baboonColor.png'</span>));
+[img, features, segmented_img] = myMeanShiftSegmentation(image, 2, 1, 1500, 250, 250, 15, 0.1);
+figure;
+subplot(1,2,1);
+imagesc(image/255);
+daspect([1 1 1]);
+axis <span class="string">tight</span>;
+colormap(myColorScale);
+title(<span class="string">'Original'</span>);
+
+subplot(1,2,2);
+imagesc(segmented_img);
+daspect([1 1 1]);
+axis <span class="string">tight</span>;
+colormap(myColorScale);
+title(<span class="string">'Segmented'</span>);
+
+toc;
+</pre>
+
+<h2>function myMeanShiftSegmentation<a name="3"></a></h2><pre class="codeinput"><span class="keyword">function</span> [ img, features, segmented_img ] = myMeanShiftSegmentation( image, sampling_rate, sigma_smooth, <span class="keyword">...</span>
+                                                    nbr_no, h_color, h_space, num_iter, learning_rate )
+    <span class="comment">% Inferences</span>
+    <br>
+    <span class="comment">% Since the kernel is a product of two kernels, there will be a factor of (h_1/h_2)^2 in the value of log(gradient(f(x))),</span>
+    <span class="comment">% we have ignored that for simplicity and let the learning_rate take care of it</span>
+
+    <span class="comment">% init variables</span>
+    [m n p] = size(image);
+    K = round(3*sigma_smooth);
+    max_intensity = 255;
+
+    <span class="comment">% sample and smooth image</span>
+    img = image(1:sampling_rate:m, 1:sampling_rate:n, :);
+    smooth_filt = fspecial(<span class="string">'gaussian'</span>, [2*K+1, 2*K+1], sigma_smooth);
+    img = imfilter(img, smooth_filt);
+
+    <span class="comment">% take all normalized features</span>
+    features = img;
+    [m n p] = size(img);
+    features(:,:,p+1) = meshgrid(1:m, 1:n)';
+    features(:,:,p+2) = meshgrid(1:n, 1:m);
+    features = reshape(features, m*n, p+2);
+
+    <span class="comment">% features are in 2D [num_pixels, num_features] now, do some gradient</span>
+    <span class="comment">% ascent</span>
+    <span class="keyword">function</span> gradient = myGradient(x, index)
+        nbrs = features(index, :);
+        m_nbrs = nbrs - meshgrid(x, 1:nbr_no);
+        wts1 = exp(-sum((m_nbrs(:, 1:p)/h_color).^2, 2));
+        wts2 = exp(-sum((m_nbrs(:, p+1:p+2)/h_space).^2, 2));
+        wts = wts1.*wts2;
+        <span class="comment">% wts is a nbr*1 vector</span>
+        gradient = sum(repmat(wts, 1, p+2).*nbrs)/sum(wts) - x;
+    <span class="keyword">end</span>
+
+    <span class="comment">% for every iteration, find neighbours, compute gradients and update</span>
+    <span class="comment">% values</span>
+    <span class="keyword">for</span> iter = 1:num_iter
+        fprintf(<span class="string">'Iteration number %d\n'</span>, iter);
+        <span class="comment">% compute nearest neighbours</span>
+        idx = knnsearch(features, features, <span class="string">'k'</span>, nbr_no);
+        gradients = zeros(size(features));
+        <span class="keyword">for</span> i=1:m*n,
+           gradients(i, :) = myGradient(features(i,:), idx(i,:));
+        <span class="keyword">end</span>
+        features = features + learning_rate*gradients;
+    <span class="keyword">end</span>
+
+
+
+    segmented_img = reshape(features(:,1:p), m, n, p)/255;
+<span class="keyword">end</span></pre>
+<pre class="codeoutput">Iteration number 1
+Iteration number 2
+Iteration number 3
+Iteration number 4
+Iteration number 5
+Iteration number 6
+Iteration number 7
+Iteration number 8
+Iteration number 9
+Iteration number 10
+Iteration number 11
+Iteration number 12
+Iteration number 13
+Iteration number 14
+Iteration number 15
+Elapsed time is 655.698364 seconds.
+</pre>
+<h2>Image comparison<a name="4"></a></h2><img vspace="5" hspace="5" src="../images/myMainScript_01.png" width=80% alt="">
+<h2>3d Scatter Plot comparison<a name="5"></a></h2>
+<h4> The below scatter plots show that the image has decomposed into segments</h4><br><br>
+<div class="main_block">
+
+    <div class="inner_block">
+        <img vspace="5" hspace="5"  src="../images/scatter_original.png">
+    </div>
+
+    <div class="inner_block">
+        <img vspace="5" hspace="5" src="../images/scatter_segmented.png" >
+    </div>    
+</div>
+<br>
+ <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MyMainScript
+% sample for my own colormap
+myNumOfColors = 256; 
+colorScale = 0:1/(myNumOfColors-1):1;
+myColorScale = [ colorScale' colorScale' colorScale' ];
+
+% This contains the code that imports the image,
+% generates the plots, and segments it
+tic;
+%% Your code here
+image = double(imread('../data/baboonColor.png'));
+[img, features, segmented_img] = myMeanShiftSegmentation(image, 2, 1, 1500, 250, 250, 15, 0.1);
+figure;
+subplot(1,2,1);
+imagesc(image/255);
+daspect([1 1 1]);
+axis tight;
+colormap(myColorScale);
+title('Original');
+
+subplot(1,2,2);
+imagesc(segmented_img);
+daspect([1 1 1]);
+axis tight;
+colormap(myColorScale);
+title('Segmented');
+
+toc;
+
+##### SOURCE END #####
+--></body></html>

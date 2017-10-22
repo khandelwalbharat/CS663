@@ -12,10 +12,10 @@ load('../data/boat.mat');
 
 
 % assume only grayscale images
-% The optimal values used are k=0.005, sigma_smooth=2.0 and
-% sigma_region=16.9
+% The optimal values used are k=0.2, sigma_smooth=0.8 and
+% sigma_region=0.8
 [m n] = size(imageOrig);
-[img, Ix, Iy, eig1, eig2, C] = myHarrisCornerDetector(imageOrig, 2.58, 17.1, 0.15);
+[img, Ix, Iy, eig1, eig2, C] = myHarrisCornerDetector(imageOrig, 0.8, 0.8, 0.2);
 
 
 %% Show the images
@@ -79,7 +79,7 @@ for i=1:3,
     color_img(:,:,i) = img;
 end
 
-C = (C>0);
+C = (C>2e-5);
 C = imfilter(C, ones(5));
 
 tmp = color_img(:,:,1);

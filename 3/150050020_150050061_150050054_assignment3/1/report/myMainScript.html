@@ -77,10 +77,10 @@ tic;
 
 
 <span class="comment">% assume only grayscale images</span>
-<span class="comment">% The optimal values used are k=0.005, sigma_smooth=2.0 and</span>
-<span class="comment">% sigma_region=16.9</span>
+<span class="comment">% The optimal values used are k=0.2, sigma_smooth=0.8 and</span>
+<span class="comment">% sigma_region=0.8</span>
 [m n] = size(imageOrig);
-[img, Ix, Iy, eig1, eig2, C] = myHarrisCornerDetector(imageOrig, 2.58, 17.1, 0.15);
+[img, Ix, Iy, eig1, eig2, C] = myHarrisCornerDetector(imageOrig, 0.8, 0.8, 0.2);
 </pre><h2>Show the images<a name="3"></a></h2><p>Oiginal Image</p><pre class="codeinput">figure();
 imagesc(imageOrig);
 daspect([1 1 1]);
@@ -138,7 +138,7 @@ title(<span class="string">'Eigenvalue eig2 of the structure tensor'</span>);
     color_img(:,:,i) = img;
 <span class="keyword">end</span>
 
-C = (C&gt;0);
+C = (C&gt;2e-5);
 C = imfilter(C, ones(5));
 
 tmp = color_img(:,:,1);
@@ -168,119 +168,11 @@ toc;
 	<h3>Inferences</h3>
 	<p>	The parameters for the Harris corner detection has been given in the code. The eigenvalue calculation has been done with a little bit of math (since it's a 2*2 matrix, we solve the quadratic equation and calculate the values of lambda which will be the eigenvalues). </p>
 
-	<p>Instead of directly showing the values of C directly (which is very cumbersome because it is sparse), we have taken those points where C > 0 and then convoluted that with a 5*5 matrix of ones (to make them larger squares).
+	<p>Instead of directly showing the values of C directly (which is very cumbersome because it is sparse), we have taken those points where C > threshold and then convoluted that with a 5*5 matrix of ones (to make them larger squares).
 	After that, we make a color image with all the 3 channels set to the blurred image, and make the pixels red where the indices correspond to the corners. This provides a much better visualization.</p>
-
-	<p>There are some clear corners like the corners of the boat, some more "actual" corners in the other boats, and some more corners in the water (we believe it's because of the coloring - its just a black patch with white intensities surrouding it, hence giving high values of horizontal and vertical gradients). Also, one more observation is that since the value of w(u,v)*Ix^2 is calculated with zero padding, there are corners detected in the actual corners of the image. We can avoid that by considering corners only "inside" the boundary. Even the higher eigenvalue matrix is bright near the image boundaries suggesting an edge there (because of high difference in intensity). </p>
 </div>
-<!--
-##### SOURCE BEGIN #####
-%% MyMainScript
-% sample for my own colormap
-myNumOfColors = 256; 
-colorScale = 0:1/(myNumOfColors-1):1;
-myColorScale = [ colorScale' colorScale' colorScale' ];
-
-% This contains the code that imports the image,
-% generates the plots, and computes the corners
-tic;
-%% Code for implementing myHarrisCornerDetector
-load('../data/boat.mat');
 
 
-% assume only grayscale images
-% The optimal values used are k=0.005, sigma_smooth=2.0 and
-% sigma_region=16.9
-[m n] = size(imageOrig);
-[img, Ix, Iy, eig1, eig2, C] = myHarrisCornerDetector(imageOrig, 2.0, 16.9, 0.005);
-
-
-%% Show the images
-% Oiginal Image 
-figure();
-imagesc(imageOrig);
-daspect([1 1 1]);
-axis tight;
-colormap(myColorScale);
-colorbar;
-title('Original Image');
-
-% Smooth Image
-figure();
-imagesc(img);
-daspect([1 1 1]);
-axis tight;
-colormap(myColorScale);
-colorbar;
-title('Smooth Image');
-
-% Derivative Image along X axis
-figure();
-imagesc(Ix);
-daspect([1 1 1]);
-axis tight;
-colormap(myColorScale);
-colorbar;
-title('Derivative Image along X axis');
-
-% Derivative Image along Y axis
-figure();
-imagesc(Iy);
-daspect([1 1 1]);
-axis tight;
-colormap(myColorScale);
-colorbar;
-title('Derivative Image along Y axis');
-
-% eig1 image
-figure();
-imagesc(eig1);
-daspect([1 1 1]);
-axis tight;
-colormap(myColorScale);
-colorbar;
-title('Eigenvalue eig1 of the structure tensor');
-
-% eig2 image
-figure();
-imagesc(eig2);
-daspect([1 1 1]);
-axis tight;
-colormap(myColorScale);
-colorbar;
-title('Eigenvalue eig2 of the structure tensor');
-
-%% color_img is used to display red dots for corners
-color_img = zeros(m, n, 3);
-for i=1:3,
-    color_img(:,:,i) = img;
-end
-
-C = (C>0);
-C = imfilter(C, ones(5));
-
-tmp = color_img(:,:,1);
-tmp(C) = 1;
-color_img(:,:,1) = tmp;
-
-tmp = color_img(:,:,2);
-tmp(C) = 0;
-color_img(:,:,2) = tmp;
-
-tmp = color_img(:,:,3);
-tmp(C) = 0;
-color_img(:,:,3) = tmp;
-
-% Corners highlighted
-figure();
-imagesc(color_img);
-daspect([1 1 1]);
-axis tight;
-colormap(myColorScale);
-colorbar;
-title('Corners highlighted');
-##### SOURCE END #####
--->
 <div class="content">
 <h2>Contents</h2><div><ul><li><a href="#5">Gives Harris corner detection</a></li><li><a href="#6">smoothen the image</a></li><li><a href="#7">find x and y gradients ( assuming x is horizontal)</a></li><li><a href="#8">generate the matrices for structure tensor ( w*Ix2, w*Iy2, w*Ix*Iy )</a></li><li><a href="#9">finding the eigenvalues in bulk ( with a bit of math )</a></li><li><a href="#10">det - k*(trace).^2</a></li><li><a href="#11">non maximal suppression</a></li></ul></div>
 <pre class="codeinput"><span class="keyword">function</span> [ smooth_img, Ix, Iy, eig1, eig2, final_C ] = myHarrisCornerDetector( imageOrig, sigma_smooth, sigma_region, k )
