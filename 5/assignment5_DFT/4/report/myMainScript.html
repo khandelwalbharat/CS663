@@ -1,0 +1,206 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>myMainScript</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-26"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">MyMainScript</a></li><li><a href="#2">Original Image</a></li><li><a href="#3">Ideal low pass filter</a></li><li><a href="#4">Gaussian low pass filter</a></li></ul></div><h2>MyMainScript<a name="1"></a></h2><pre class="codeinput">tic;
+clc;
+clear;
+</pre><h2>Original Image<a name="2"></a></h2><pre class="codeinput">img = imread(<span class="string">'../data/barbara256.png'</span>);
+figure, imagesc(img), colormap(gray(256)), axis <span class="string">image</span>, title(<span class="string">'Original image'</span>);
+</pre><img vspace="5" hspace="5" src="../images/myMainScript_01.png" alt=""> <h2>Ideal low pass filter<a name="3"></a></h2><pre class="codeinput">D=40;
+[new_img, H] = ideal_low_pass_filter(img, D);
+figure, imagesc(uint8(abs(new_img))), title(<span class="string">'Ideal Low Pass Filter with D=40'</span>), axis <span class="string">image</span>,colormap(gray(256));
+figure, imagesc(H, [min(min(H)) max(max(H))]); colormap(jet); colorbar, axis <span class="string">image</span>, title(<span class="string">'Ideal Filter with D=40'</span>);
+
+D=80;
+[new_img, H] = ideal_low_pass_filter(img, D);
+figure, imagesc(uint8(abs(new_img))), title(<span class="string">'Ideal Low Pass Filter with D=80'</span>), axis <span class="string">image</span>, colormap(gray(256));
+figure, imagesc(H, [min(min(H)) max(max(H))]); colormap(jet); colorbar, axis <span class="string">image</span>, title(<span class="string">'Ideal Filter with D=80'</span>);
+<div class="content"><pre class="codeinput"><span class="keyword">function</span> [ new_img, H ] = ideal_low_pass_filter( img, D )
+<span class="comment">%UNTITLED function to implement ideal low-pass filter</span>
+<span class="comment">%   Detailed explanation goes here</span>
+    [l w] = size(img);
+    padded_img = img;
+    imgfft = fft2(padded_img);
+    imgfft_shift = fftshift(imgfft);
+    imgabs = log(abs(imgfft_shift)+1);
+
+    H = zeros(size(imgfft));
+       <span class="keyword">for</span> u=1:l
+           <span class="keyword">for</span> v=1:w
+               <span class="keyword">if</span>((u-128)^2 + (v-128)^2 &lt;= D^2)
+                   H(u,v) = 1;
+               <span class="keyword">end</span>
+           <span class="keyword">end</span>
+       <span class="keyword">end</span>
+    new_img = ifft2(ifftshift(imgfft_shift.*H));
+
+    H = log(abs(H)+1);
+<span class="keyword">end</span>
+
+<span class="comment">% function [ new_img, H ] = ideal_low_pass_filter( img, D )</span>
+<span class="comment">% %With padding function to implement ideal low-pass filter</span>
+<span class="comment">% %   Result isn't good with the padding</span>
+<span class="comment">%     [l w] = size(img);</span>
+<span class="comment">%     padded_img = padarray(img, [l/2 w/2]);</span>
+<span class="comment">%     imgfft = fft2(padded_img);</span>
+<span class="comment">%     imgfft_shift = fftshift(imgfft);</span>
+<span class="comment">%     imgabs = log(abs(imgfft_shift)+1);</span>
+<span class="comment">%</span>
+<span class="comment">%     H = zeros(size(imgfft));</span>
+<span class="comment">%     for u=l/2+1:l/2+l</span>
+<span class="comment">%         for v=w/2+1:w/2+w</span>
+<span class="comment">%             if((u-256)^2 + (v-256)^2 &lt;= D^2)</span>
+<span class="comment">%                 H(u,v) = 1;</span>
+<span class="comment">%             end</span>
+<span class="comment">%         end</span>
+<span class="comment">%     end</span>
+<span class="comment">%</span>
+<span class="comment">%     new_img = ifft2(ifftshift(imgfft_shift.*H));</span>
+<span class="comment">%     new_img = new_img(l/2+1:l/2+l,w/2+1:w/2+w);</span>
+<span class="comment">%</span>
+<span class="comment">%     H = log(abs(H)+1);</span>
+<span class="comment">% end</span>
+</pre></div>
+
+</pre><img vspace="5" hspace="5" src="../images/myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="../images/myMainScript_03.png" alt=""><br> <img vspace="5" hspace="5" src="../images/myMainScript_04.png" alt=""> <img vspace="5" hspace="5" src="../images/myMainScript_05.png" alt=""> <h2>Gaussian low pass filter<a name="4"></a></h2><pre class="codeinput">D=40;
+[new_img, H] = gaussian_low_pass_filter(img, D);
+figure, imagesc(uint8(abs(new_img))), title(<span class="string">'Gaussian Low Pass Filter with sigma = 40'</span>), axis <span class="string">image</span>, colormap(gray(256));
+figure, imagesc(H, [min(min(H)) max(max(H))]); colormap(jet); axis <span class="string">image</span>, colorbar, title(<span class="string">'Gaussian Filter with Sigma = 40'</span>);
+
+D=80;
+[new_img, H] = gaussian_low_pass_filter(img, D);
+figure, imagesc(uint8(abs(new_img))), title(<span class="string">'Gaussian Low Pass Filter with sigma = 80'</span>), axis <span class="string">image</span>, colormap(gray(256));
+figure, imagesc(H, [min(min(H)) max(max(H))]); colormap(jet); axis <span class="string">image</span>, colorbar, title(<span class="string">'Gaussian Filter with Sigma = 80'</span>);
+
+toc;
+<div class="content"><pre class="codeinput"><span class="keyword">function</span> [ new_img, H ] = gaussian_low_pass_filter(  img, D )
+<span class="comment">%UNTITLED2 function to implement gaussian low-pass filter</span>
+<span class="comment">%   Detailed explanation goes here</span>
+
+    [l w] = size(img);
+    padded_img = img;
+    imgfft = fft2(padded_img);
+    imgfft_shift = fftshift(imgfft);
+    imgabs = log(abs(imgfft_shift)+1);
+
+    H = zeros(size(imgfft));
+
+    <span class="keyword">for</span> u=1:l
+       <span class="keyword">for</span> v=1:w
+           <span class="keyword">if</span>((u-128)^2 + (v-128)^2 &lt;= D^2)
+               H(u,v) = exp(-((u-128)^2 + (v-128)^2)/(2*D^2));;
+           <span class="keyword">end</span>
+       <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    new_img = ifft2(ifftshift(imgfft_shift.*H));
+    H = log(abs(H)+1);
+<span class="keyword">end</span>
+
+
+<span class="comment">% function [ new_img, H ] = gaussian_low_pass_filter(  img, D )</span>
+<span class="comment">% %With padding function to implement gaussian low-pass filter</span>
+<span class="comment">% %   The results aren't good with this</span>
+<span class="comment">%     [l w] = size(img);</span>
+<span class="comment">%     padded_img = padarray(img, [l/2 w/2]);</span>
+<span class="comment">%     imgfft = fft2(padded_img);</span>
+<span class="comment">%     imgfft_shift = fftshift(imgfft);</span>
+<span class="comment">%     imgabs = log(abs(imgfft_shift)+1);</span>
+<span class="comment">%</span>
+<span class="comment">%     H = zeros(size(imgfft));</span>
+<span class="comment">%     for u=l/2+1:l/2+l</span>
+<span class="comment">%         for v=w/2+1:w/2+w</span>
+<span class="comment">%             if((u-256)^2 + (v-256)^2 &lt;= D^2)</span>
+<span class="comment">%                 H(u,v) = exp(-((u-256)^2 + (v-256)^2)/(2*D^2));</span>
+<span class="comment">%             end</span>
+<span class="comment">%         end</span>
+<span class="comment">%     end</span>
+<span class="comment">%</span>
+<span class="comment">%     new_img = ifft2(ifftshift(imgfft_shift.*H));</span>
+<span class="comment">%     new_img = new_img(l/2+1:l/2+l,w/2+1:w/2+w);</span>
+<span class="comment">%</span>
+<span class="comment">%     H = log(abs(H)+1);</span>
+<span class="comment">% end</span>
+</pre></div>
+</pre><pre class="codeoutput">Elapsed time is 8.994729 seconds.
+</pre><img vspace="5" hspace="5" src="../images/myMainScript_06.png" alt=""> <img vspace="5" hspace="5" src="../images/myMainScript_07.png" alt=""> <br> <img vspace="5" hspace="5" src="../images/myMainScript_08.png" alt=""> <img vspace="5" hspace="5" src="../images/myMainScript_09.png" alt=""></div>
+
+
+
+
+<div class="content">
+	<h2>Observations:-</h2>
+	<h3>
+		a) Image blurring is seen in both the cases.<br>
+		b) The ringing artifacts are clearly seen when ideal low-pass filter is applied whereas they are negligible in case of the gaussian low-pass filter.
+	</h3>
+	Note:- There was no need for padding in this case as we were just multiplying the filter in the fourier domain. Had we performed the convolution in the spatial domain, padding would have been essential. we have still included a commented out code in the files submitted which have included padding(as it was mentioned in the question) but the results with them were not so good. 
+</div>
+
+
+<p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p>
+</body></html>

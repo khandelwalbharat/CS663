@@ -1,0 +1,165 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>PCA based denoising</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-26"><meta name="DC.source" content="myMainScript.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>PCA Based Denoising</h1>
+	
+
+	<h3>Inferences:</h3>
+	<p>The values of MSE for all the 3 cases are given below. For denoising, we saw that bilateral filtering uses the information of its "immediate spatial neighbours" instead of a range and a similarity metric between patches, as we were doing for PCA based. The PCA denoising uses more information about the nearby patches in terms of mean squared error, and uses this information of similar patches to denoise. Bilateral filtering does not do any of this. That is the main difference between bilateral filtering and PCA based. So the main differences are:
+
+	<ol>
+		<li>PCA based denoising uses knowledge of similar patches, but bilateral filtering doesn't. This is useful if there are similar patterns in the image. </li>
+		<li>Bilateral filtering uses only its immediate spatial neighbours, whereas PCA-based doesn't necessarily do that.</li>
+		<li>Bilateral filtering doesn't make use of the noise model, whereas PCA-based uses the noise model to be Gaussian.</li>
+		<li>Bilateral filtering can't remove if the noise levels are too high, but PCA handles it very well.</li>
+	</ol>
+
+	</p>
+
+  <pre class="codeinput">tic;
+<span class="comment">% hyperparameters</span>
+sigma = 20;
+p = 7;
+L = 200;
+window = 31;
+
+spatial_sigma = 1.6;
+intensity_sigma = 9.7;
+
+<span class="comment">% Get image and make it noisy</span>
+im = double(imread(<span class="string">'../data/barbara256.png'</span>));
+[m, n] = size(im);
+im_noisy = im + sigma*randn(size(im));
+im2 = myPCADenoising1(im_noisy, sigma, p);
+toc;
+
+tic;
+im3 = myPCADenoising2(im_noisy, sigma, p, L, window);
+toc;
+
+tic;
+im4 = myBilateralFiltering(im_noisy, spatial_sigma, intensity_sigma);
+toc;
+
+<span class="comment">% Show all figures</span>
+figure; imagesc(im); colormap(gray); title(<span class="string">'Real image'</span>);
+figure; imagesc(im_noisy); colormap(gray); title(<span class="string">'Noisy image'</span>);
+figure; imagesc(im2); colormap(gray); title(<span class="string">'Denoised image'</span>);
+figure; imagesc(im3); colormap(gray); title(<span class="string">'Denoised image using windows'</span>);
+figure; imagesc(im4); colormap(gray); title(<span class="string">'Denoised image using Bilateral filtering'</span>);
+
+fprintf(<span class="string">'MSE of original and global PCA denoised image = %f\n'</span>, sum(sum((im2 - im).^2))/m/n);
+fprintf(<span class="string">'MSE of original and windowed PCA denoised image = %f\n'</span>, sum(sum((im3 - im).^2))/m/n);
+fprintf(<span class="string">'MSE of original and bilateral filtering = %f\n'</span>, sum(sum((im4 - im).^2))/m/n);
+</pre><pre class="codeoutput">Elapsed time is 0.096114 seconds.
+Elapsed time is 144.486347 seconds.
+Elapsed time is 1.276601 seconds.
+MSE of original and global PCA denoised image = 95.977075
+MSE of original and windowed PCA denoised image = 59.684398
+MSE of original and bilateral filtering = 339.232245
+</pre><img vspace="5" hspace="5" src="myMainScript_01.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_02.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_03.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_04.png" alt=""> <img vspace="5" hspace="5" src="myMainScript_05.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MyMainScript
+tic;
+% hyperparameters
+sigma = 20; 
+p = 7;
+L = 200;
+window = 31;
+
+spatial_sigma = 1.6;
+intensity_sigma = 9.7;
+
+% Get image and make it noisy
+im = double(imread('../data/barbara256.png'));
+[m, n] = size(im);
+im_noisy = im + sigma*randn(size(im));
+im2 = myPCADenoising1(im_noisy, sigma, p);
+toc;
+
+tic;
+im3 = myPCADenoising2(im_noisy, sigma, p, L, window);
+toc;
+
+tic;
+im4 = myBilateralFiltering(im_noisy, spatial_sigma, intensity_sigma);
+toc;
+
+% Show all figures
+figure; imagesc(im); colormap(gray); title('Real image');
+figure; imagesc(im_noisy); colormap(gray); title('Noisy image');
+figure; imagesc(im2); colormap(gray); title('Denoised image');
+figure; imagesc(im3); colormap(gray); title('Denoised image using windows');
+figure; imagesc(im4); colormap(gray); title('Denoised image using Bilateral filtering');
+
+fprintf('MSE of original and global PCA denoised image = %f\n', sum(sum((im2 - im).^2))/m/n);
+fprintf('MSE of original and windowed PCA denoised image = %f\n', sum(sum((im3 - im).^2))/m/n);
+fprintf('MSE of original and bilateral filtering = %f\n', sum(sum((im4 - im).^2))/m/n);
+
+##### SOURCE END #####
+--></body></html>
